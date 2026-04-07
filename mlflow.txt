@@ -1,0 +1,202 @@
+Here’s your **clean, plain-text, well-structured version** (updated and ready to use in notes, docs, or interviews):
+
+---
+
+# MLflow `mlflow.autolog()` (Updated – 2026)
+
+`mlflow.autolog()` in MLflow automatically logs parameters, metrics, models, and other training details for many supported machine learning frameworks such as scikit-learn, TensorFlow/Keras, PyTorch Lightning, XGBoost, and LightGBM. However, its behavior depends on the framework and does not cover all aspects of a machine learning workflow.
+
+---
+
+# What `mlflow.autolog()` Logs
+
+### 1. Parameters
+
+* Logs model hyperparameters such as:
+
+  * learning_rate, max_depth, n_estimators, etc.
+* Also logs estimator configurations
+* In some frameworks, logs parameters passed to the `.fit()` method
+
+---
+
+### 2. Metrics
+
+* Logs metrics generated during training, such as:
+
+  * accuracy, loss, RMSE, AUC
+* Includes both training and validation metrics (if available)
+
+**Important:**
+
+* Only metrics produced within the training process are logged automatically
+* Metrics computed after training are NOT logged automatically
+
+---
+
+### 3. Model
+
+* Logs the trained model automatically using the appropriate MLflow model flavor
+* Includes:
+
+  * Serialized model
+  * MLmodel metadata file
+
+---
+
+### 4. Model Signature and Input Example
+
+* Automatically infers:
+
+  * Input schema
+  * Output schema
+* May also log an example input if available
+
+---
+
+### 5. Dataset Tracking (Newer Feature)
+
+* MLflow now supports dataset tracking (partially automated)
+
+Autolog may capture:
+
+* Dataset schema (structure)
+* Dataset references (in some cases)
+
+**Not logged automatically:**
+
+* Full dataset
+* Dataset size (in most cases)
+
+---
+
+### 6. Framework-Specific Information
+
+Logs additional details depending on the framework, such as:
+
+* Early stopping parameters (XGBoost, LightGBM)
+* Epoch information (TensorFlow, PyTorch Lightning)
+* Optimizer configuration
+* Feature importance (tree-based models)
+
+---
+
+### 7. Environment and Dependencies
+
+* Logs environment details when a model is logged:
+
+  * Python version
+  * pip/conda dependencies
+
+**Note:**
+
+* Environment is only logged if the model is logged
+
+---
+
+### 8. Hyperparameter Tuning
+
+* Works with:
+
+  * GridSearchCV
+  * RandomizedSearchCV
+
+Logs:
+
+* Best parameters
+* Some cross-validation results
+* Trial runs (in certain configurations)
+
+**Limitation:**
+
+* Custom tuning frameworks (e.g., Optuna, Ray Tune) require manual logging
+
+---
+
+# What `mlflow.autolog()` Does NOT Log
+
+### 1. Custom Metrics (Outside Training)
+
+* Metrics calculated manually after training are not logged
+
+Requires:
+
+* `mlflow.log_metric()`
+
+---
+
+### 2. Custom Artifacts
+
+* Not logged automatically:
+
+  * Custom plots
+  * Reports
+  * External files
+
+Requires:
+
+* `mlflow.log_artifact()`
+
+---
+
+### 3. Datasets and Preprocessed Data
+
+* Does NOT log:
+
+  * Raw datasets
+  * Processed datasets
+  * Feature-engineered data
+
+---
+
+### 4. Intermediate Model States
+
+* Does NOT log:
+
+  * Model checkpoints
+  * Per-epoch models
+
+Requires manual logging
+
+---
+
+### 5. Custom Training Loops
+
+* Limited support for:
+
+  * Raw PyTorch loops
+  * Custom pipelines
+
+Requires manual logging of:
+
+* metrics
+* parameters
+* models
+
+---
+
+### 6. Unsupported Frameworks
+
+* Autologging works only with supported frameworks
+* Partial or no logging for unsupported libraries
+
+---
+
+# Summary
+
+**Best suited for:**
+
+* Standard machine learning workflows
+* Quick experiment tracking
+* Supported frameworks
+
+**Requires manual logging for:**
+
+* Custom metrics
+* Custom artifacts
+* Datasets
+* Complex or custom pipelines
+
+---
+
+

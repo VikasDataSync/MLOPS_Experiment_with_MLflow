@@ -1,0 +1,276 @@
+Here’s your **updated, clean, and accurate (2026-ready) version** of MLflow tracking capabilities, with corrections and clearer boundaries based on current behavior of **MLflow**.
+
+---
+
+# MLflow: What You Can Track & Log (Updated – 2026)
+
+MLflow is a platform for tracking, managing, and reproducibly running machine learning experiments. It supports logging across multiple dimensions, but some items require **manual logging** rather than being automatic.
+
+---
+
+# 1. Metrics
+
+You can log numerical performance measures over time or per run.
+
+**Examples:**
+
+* Accuracy
+* Loss (training / validation)
+* Precision, Recall, F1-score
+* AUC (Area Under Curve)
+* Regression metrics (RMSE, MAE, R²)
+
+**Key Point:**
+
+* Any numeric value can be logged using:
+
+  ```
+  mlflow.log_metric()
+  ```
+
+---
+
+# 2. Parameters
+
+Used to track configuration values of your experiment.
+
+**Examples:**
+
+* Model hyperparameters (learning_rate, max_depth, n_estimators)
+* Training configuration (batch size, epochs)
+* Data processing parameters (train-test split ratio)
+* Feature engineering settings
+
+**Key Point:**
+
+* Logged using:
+
+  ```
+  mlflow.log_param()
+  ```
+
+---
+
+# 3. Artifacts
+
+Artifacts are **files** generated during experiments.
+
+**Examples:**
+
+* Trained models
+* Plots (loss curves, feature importance)
+* Confusion matrices, ROC curves
+* Reports (PDF, HTML, JSON)
+* Scripts or notebooks
+* Environment files (`requirements.txt`, `conda.yaml`)
+
+**Important Update (Correction):**
+
+* MLflow does **NOT automatically log most artifacts**
+* You must explicitly log them:
+
+  ```
+  mlflow.log_artifact()
+  ```
+
+---
+
+# 4. Models
+
+MLflow provides structured model logging with versioning support.
+
+**Supported formats:**
+
+* Native MLflow model format (recommended)
+* Pickle-based models (via framework flavors)
+* ONNX (if manually exported)
+* Custom Python models
+
+**Includes:**
+
+* Model files
+* Metadata (MLmodel file)
+* Optional signature and input example
+
+---
+
+# 5. Dataset Tracking (Updated Feature)
+
+MLflow now supports **dataset tracking**, but with limitations.
+
+**What you can log:**
+
+* Dataset references
+* Dataset schema
+* Metadata (source, version)
+
+**How:**
+
+```
+mlflow.log_input()
+```
+
+**Important:**
+
+* Full datasets are **NOT automatically stored**
+* Logging full datasets is **manual and not recommended for large data**
+
+---
+
+# 6. Tags
+
+Tags store metadata for organization and filtering.
+
+**Examples:**
+
+* Experiment description
+* Author name
+* Model type
+* Environment info (e.g., GPU, cloud provider)
+
+**Usage:**
+
+```
+mlflow.set_tag()
+```
+
+---
+
+# 7. Source Code & Reproducibility
+
+MLflow helps track experiment reproducibility.
+
+**Tracks automatically (when available):**
+
+* Git commit hash
+* Git repository
+
+**Can log manually:**
+
+* Scripts
+* Notebooks
+* Dependency files
+
+**Environment tracking:**
+
+* Python version
+* Installed packages (when model is logged)
+
+---
+
+# 8. Inputs and Outputs (Clarified)
+
+This area has improved but is often misunderstood.
+
+**Inputs (Datasets):**
+
+* Can log dataset metadata using `log_input()`
+* Not automatically logged by default
+
+**Outputs:**
+
+* Predictions or inference results can be logged as:
+
+  * Metrics
+  * Artifacts (e.g., CSV files)
+
+**Important Correction:**
+
+* MLflow does NOT automatically log:
+
+  * Training dataset
+  * Test dataset
+  * Predictions
+
+---
+
+# 9. Custom Logging
+
+MLflow is flexible and allows logging of arbitrary content.
+
+**You can log:**
+
+* Any file type (CSV, JSON, images, models)
+* Serialized Python objects
+* Custom evaluation outputs
+
+---
+
+# 10. Model Registry
+
+MLflow includes a centralized model management system.
+
+**Features:**
+
+* Model versioning
+* Stage transitions:
+
+  * Staging
+  * Production
+  * Archived
+* Model lineage tracking
+
+**Important Update:**
+
+* Registry is often backed by:
+
+  * Databases
+  * Cloud storage (Databricks, OSS setups)
+
+---
+
+# 11. Run & Experiment Metadata
+
+Each experiment run automatically tracks:
+
+* Run ID (unique identifier)
+* Experiment name
+* Start and end timestamps
+* Run status (Finished / Failed)
+* Execution duration
+
+---
+
+# 🔍 Key Corrections from Older Versions
+
+| Topic                | Old Understanding | Updated Reality            |
+| -------------------- | ----------------- | -------------------------- |
+| Dataset logging      | Automatic         | ❌ Manual + partial support |
+| Artifacts            | Mostly automatic  | ❌ Mostly manual            |
+| Predictions logging  | Automatic         | ❌ Manual                   |
+| Environment tracking | Always logged     | ⚠ Only with model logging  |
+| ONNX logging         | Built-in          | ⚠ Requires manual handling |
+
+---
+
+# ✅ Final Summary
+
+MLflow allows you to track:
+
+* Metrics → performance values
+* Parameters → configuration settings
+* Artifacts → files and outputs
+* Models → serialized + versioned
+* Datasets → metadata (not full data)
+* Tags → experiment metadata
+* Code & environment → reproducibility
+
+---
+
+### ✔ Best Use Case
+
+* Experiment tracking
+* Model comparison
+* Reproducibility
+
+### ⚠ Requires Manual Logging
+
+* Datasets
+* Custom metrics
+* Plots & reports
+* Predictions
+* Complex pipelines
+
+---
+
+
